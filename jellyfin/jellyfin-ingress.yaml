@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: scaleway
+    nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0
+  labels:
+    app: jellyfin
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: jellyfin.public.soulkyu.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jellyfin
+                port:
+                  number: 8096
+  tls:
+    - hosts:
+      - jellyfin.public.soulkyu.net
+      secretName: jellyfin.public.soulkyu.net-tls

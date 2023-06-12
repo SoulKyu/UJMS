@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  selector:
+    matchLabels:
+      app: jellyfin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+        deployed_by: argocd
+    spec:
+      containers:
+        - name: jellyfin
+          image: lscr.io/linuxserver/jellyfin:latest
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: "TZ"
+              value: "Europe/Paris"
+            - name: "NVIDIA_VISIBLE_DEVICES"
+              value: "GPU-d2d55590-eb95-fdcb-db7c-092445cd4255"
+            - name: "JELLYFIN_PublishedServerUrl"
+              value: "https://jellyfin.public.soulkyu.net"
+          ports:
+            - containerPort: 8096
+            - containerPort: 8920
+            - containerPort: 7359
+            - containerPort: 1900
+          resources:
+            limits:
+              memory: "8192Mi"
+              cpu: "4000m"
+            requests:
+              memory: "4096Mi"
+              cpu: "2000m"
+          volumeMounts:
+          - mountPath: /config
+            name: jellyfin-config
+          - mountPath: /data/tvshows
+            name: jellyfin-tvshows
+          - mountPath: /data/movies
+            name: jellyfin-movies
+          - mountPath: /jellyfin/jellyfin-web/config.json
+            name: jellyfin-configjson
+            subPath: config.json
+      volumes:
+      - name: jellyfin-configjson
+        configMap:
+          name: configjson
+      - persistentVolumeClaim:
+          claimName: jellyfin-config
+        name: jellyfin-config
+      - persistentVolumeClaim:
+          claimName: jellyfin-tvshows
+        name: jellyfin-tvshows
+      - persistentVolumeClaim:
+          claimName: jellyfin-movies
+        name: jellyfin-movies
