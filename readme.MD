@@ -1,7 +1,7 @@
 # The Ultimate Jellyfin Media Stack
 Voici la stack ultime de Media Server permettant de déployer de manière automatisé et simple une stack de serveur de média pour vos films et séries préférées.
 
-[Homarr Dashboard](./medias/homarr.PNG "Homarr Dashboard")
+[![Homarr Dashboard](./medias/homarr.PNG "Homarr Dashboard")*Homarr Dashboard][https://homarr.dev/docs/about]
 
 Cette stack complète est composé des éléments suivants :
 - Automatisation de l'ensemble des outils via Argocd (En utilisant la chart helm de bitnami)
