@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: flaresolver
+  name: flaresolverr
   namespace: argocd
 spec:
   syncPolicy:
@@ -11,8 +11,8 @@ spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: flaresolver
+    namespace: flaresolverr
   sources:
   - repoURL: 'git@github.com:SoulKyu/UJMS.git'
-    path: flaresolver
+    path: flaresolverr
     targetRevision: main
