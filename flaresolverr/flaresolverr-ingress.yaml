@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: scaleway
+  labels:
+    app: flaresolverr
+  name: flaresolverr
+  namespace: flaresolverr
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: flaresolverr.local.soulkyu.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: flaresolverr
+                port:
+                  number: 8191
+  tls:
+    - hosts:
+      - flaresolverr.local.soulkyu.net
+      secretName: flaresolverr.local.soulkyu.net-tls

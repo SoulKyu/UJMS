@@ -1,0 +1,35 @@
+# Password : flaresolver123*flaresolverr
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaresolverr
+  namespace: flaresolverr
+spec:
+  selector:
+    matchLabels:
+      app: flaresolverr
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: flaresolverr
+        deployed_by: argocd
+    spec:
+      containers:
+        - name: flaresolverr
+          image: ghcr.io/flaresolverr/flaresolverr:latest
+          imagePullPolicy: Always
+          env:
+            - name: CAPTCHA_SOLVER
+              value: "none"
+            - name: "TZ"
+              value: "Europe/Paris"
+          ports:
+            - containerPort: 8191
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "150m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
