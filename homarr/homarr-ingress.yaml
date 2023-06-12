@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: scaleway
+  labels:
+    app: homarr
+  name: homarr
+  namespace: homarr
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: homarr.local.soulkyu.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: homarr
+                port:
+                  number: 7575
+  tls:
+    - hosts:
+      - homarr.local.soulkyu.net
+      secretName: homarr.local.soulkyu.net-tls

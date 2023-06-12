@@ -1,4 +1,4 @@
-# kubernetes-applications
+# The Ultime Jellyfin Media Stack
 On this repository we will find how to deploy a whole Media Server stacks into Kubernetes.
 
 ## The main feature of this project are : 

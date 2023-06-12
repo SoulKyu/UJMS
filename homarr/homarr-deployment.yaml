@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homarr
+  namespace: homarr
+spec:
+  selector:
+    matchLabels:
+      app: homarr
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: homarr
+        deployed_by: argocd
+    spec:
+      #nodeSelector:
+      #  purpose: "intranet-spring-apps"
+      #tolerations:
+      #  - effect: NoSchedule
+      #    key: purpose
+      #    operator: Equal
+      #    value: "intranet-spring-apps"
+      containers:
+        - name: homarr
+          image: ghcr.io/ajnart/homarr:0.12.3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7575
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "150m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+          - mountPath: /app/data/configs
+            name: homarr-config
+          - mountPath: /app/public/icons
+            name: homarr-icons
+      volumes:
+      - persistentVolumeClaim:
+          claimName: homarr-icons
+        name: homarr-icons
+      - persistentVolumeClaim:
+          claimName: homarr-config
+        name: homarr-config
