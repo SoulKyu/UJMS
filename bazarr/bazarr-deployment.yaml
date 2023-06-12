@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bazarr
+  namespace: bazarr
+spec:
+  selector:
+    matchLabels:
+      app: bazarr
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bazarr
+        deployed_by: argocd
+    spec:
+      #nodeSelector:
+      #  purpose: "intranet-spring-apps"
+      #tolerations:
+      #  - effect: NoSchedule
+      #    key: purpose
+      #    operator: Equal
+      #    value: "intranet-spring-apps"
+      containers:
+        - name: bazarr
+          image: lscr.io/linuxserver/bazarr:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6767
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "150m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+          - mountPath: /config
+            name: bazarr-config
+          - mountPath: /tv
+            name: bazarr-tvshows
+          - mountPath: /movies
+            name: bazarr-movies
+      volumes:
+      - persistentVolumeClaim:
+          claimName: bazarr-config
+        name: bazarr-config
+      - persistentVolumeClaim:
+          claimName: bazarr-tvshows
+        name: bazarr-tvshows
+      - persistentVolumeClaim:
+          claimName: bazarr-movies
+        name: bazarr-movies

@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: scaleway
+  labels:
+    app: bazarr
+  name: bazarr
+  namespace: bazarr
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: bazarr.local.soulkyu.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bazarr
+                port:
+                  number: 6767
+  tls:
+    - hosts:
+      - bazarr.local.soulkyu.net
+      secretName: bazarr.local.soulkyu.net-tls
