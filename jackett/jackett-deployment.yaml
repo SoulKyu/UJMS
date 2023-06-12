@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jackett
+  namespace: jackett
+spec:
+  selector:
+    matchLabels:
+      app: jackett
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jackett
+        deployed_by: argocd
+    spec:
+      containers:
+        - name: jackett
+          image: lscr.io/linuxserver/jackett:latest
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: "AUTO_UPDATE"
+              value: "true"
+            - name: "TZ"
+              value: "Europe/Paris"
+          ports:
+            - containerPort: 9117
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "150m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+          - mountPath: /config
+            name: jackett-config
+          - mountPath: /downloads
+            name: jackett-blackhole
+      volumes:
+      - persistentVolumeClaim:
+          claimName: jackett-blackhole
+        name: jackett-blackhole
+      - persistentVolumeClaim:
+          claimName: jackett-config
+        name: jackett-config

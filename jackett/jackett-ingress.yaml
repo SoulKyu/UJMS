@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: scaleway
+  labels:
+    app: jackett
+  name: jackett
+  namespace: jackett
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: jackett.local.soulkyu.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jackett
+                port:
+                  number: 9117
+  tls:
+    - hosts:
+      - jackett.local.soulkyu.net
+      secretName: jackett.local.soulkyu.net-tls
