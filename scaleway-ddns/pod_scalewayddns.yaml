@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: scalewayddns
+  name: scalewayddns
+  namespace: scalewayddns
+spec:
+  containers:
+  - image: aerialls/scaleway-ddns:latest
+    command: ['./scaleway-ddns']
+    args: ['--config', '/config/scaleway-ddns.yaml', '--verbose']
+    name: scalewayddns
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+      limits:
+        cpu: 150m
+        memory: 128Mi
+    volumeMounts:
+    - name: scalewayddns
+      mountPath: /config
+  volumes:
+    - name: scalewayddns
+      configMap:
+        # Provide the name of the ConfigMap containing the files you want
+        # to add to the container
+        name: scalewayddns
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always

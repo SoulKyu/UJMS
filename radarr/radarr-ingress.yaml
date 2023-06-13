@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: scaleway
+  labels:
+    app: radarr
+  name: radarr
+  namespace: radarr
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: radarr.local.soulkyu.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: radarr
+                port:
+                  number: 7878
+  tls:
+    - hosts:
+      - radarr.local.soulkyu.net
+      secretName: radarr.local.soulkyu.net-tls

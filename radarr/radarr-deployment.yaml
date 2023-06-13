@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  namespace: radarr
+spec:
+  selector:
+    matchLabels:
+      app: radarr
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: radarr
+        deployed_by: argocd
+    spec:
+      containers:
+        - name: radarr
+          image: lscr.io/linuxserver/radarr:latest
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: "TZ"
+              value: "Europe/Paris"
+          ports:
+            - containerPort: 7878
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "150m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+          - mountPath: /config
+            name: radarr-config
+          - mountPath: /movies
+            name: radarr-movies
+          - mountPath: /downloads
+            name: radarr-downloads
+      volumes:
+      - persistentVolumeClaim:
+          claimName: radarr-config
+        name: radarr-config
+      - persistentVolumeClaim:
+          claimName: radarr-movies
+        name: radarr-movies
+      - persistentVolumeClaim:
+          claimName: radarr-downloads
+        name: radarr-downloads

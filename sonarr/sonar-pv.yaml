@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    docker.io/hostpath: /var/lib/k8s-pvs/rutorrent-downloads/pvc-a023eed8-f4e4-4445-8953-c6d9e214f0f8
+    pv.kubernetes.io/provisioned-by: docker.io/hostpath
+  name: pv-download-sonarr
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /var/lib/k8s-pvs/rutorrent-downloads/pvc-a023eed8-f4e4-4445-8953-c6d9e214f0f8
+    type: ""
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: hostpath
+  volumeMode: Filesystem

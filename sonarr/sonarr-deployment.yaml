@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  namespace: sonarr
+spec:
+  selector:
+    matchLabels:
+      app: sonarr
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sonarr
+        deployed_by: argocd
+    spec:
+      containers:
+        - name: sonarr
+          image: lscr.io/linuxserver/sonarr:latest
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: "TZ"
+              value: "Europe/Paris"
+          ports:
+            - containerPort: 8989
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+            requests:
+              memory: "256Mi"
+              cpu: "150m"
+          volumeMounts:
+          - mountPath: /config
+            name: sonarr-config
+          - mountPath: /tv
+            name: sonarr-tv
+          - mountPath: /downloads
+            name: sonarr-downloads
+      volumes:
+      - persistentVolumeClaim:
+          claimName: sonarr-config
+        name: sonarr-config
+      - persistentVolumeClaim:
+          claimName: sonarr-tv
+        name: sonarr-tv
+      - persistentVolumeClaim:
+          claimName: sonarr-downloads
+        name: sonarr-downloads

@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: scaleway
+  labels:
+    app: sonarr
+  name: sonarr
+  namespace: sonarr
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: sonarr.local.soulkyu.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sonarr
+                port:
+                  number: 8989
+  tls:
+    - hosts:
+      - sonarr.local.soulkyu.net
+      secretName: sonarr.local.soulkyu.net-tls

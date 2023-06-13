@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scalewayddns
+  namespace: scalewayddns
+data:
+  scaleway-ddns.yaml: |
+    scaleway:
+      project_id: 
+      access_key: 
+      secret_key: 
+
+    domain:
+      name: soulkyu.net
+      record: "*.public"
+      ttl: 60
+
+    interval: 300
+
+    ipv4:
+      enabled: true
+      url: http://api-ipv4.ip.sb
+
+    ipv6:
+      enabled: false
+      url: https://api-ipv6.ip.sb/ip
