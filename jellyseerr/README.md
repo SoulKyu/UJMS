@@ -1,6 +1,7 @@
 # Jellyseerr
 
-Jackett permet de regrouper plusieurs indexers, il fonctionne comme un proxy et est du même style que Prowlarr.
+Jellyseerr est un logiciel permettant de gérer vos requests pour votre serveur multimédia avec une intégration native à Jellyfin. C'est un fork d'Overseerr dédié à Plex.
 
-La configuration est assez simple, il suffit d'adapter le fichier pv.yaml et ingress.yaml
-Pour pouvoir le configurer : [Configuration Jackett](https://github.com/Jackett/Jackett)
+La configuration se trouve dans /app/config
+
+Pour pouvoir le configurer : [Configuration Jellyseerr](https://github.com/Fallenbagel/jellyseerr)

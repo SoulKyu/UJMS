@@ -1,0 +1,44 @@
+# Password : jellyseerr123*jellyseerr
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyseerr
+  namespace: jellyseerr
+spec:
+  selector:
+    matchLabels:
+      app: jellyseerr
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jellyseerr
+        deployed_by: argocd
+    spec:
+      containers:
+        - name: jellyseerr
+          image: fallenbagel/jellyseerr
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: "TZ"
+              value: "Europe/Paris"
+          ports:
+            - containerPort: 5055
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "150m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+          - mountPath: /app/config
+            name: jellyseerr-config
+      volumes:
+      - persistentVolumeClaim:
+          claimName: jellyseerr-config
+        name: jellyseerr-config
