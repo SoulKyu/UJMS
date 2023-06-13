@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+  namespace: qbittorrent
+spec:
+  selector:
+    matchLabels:
+      app: qbittorrent
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+        deployed_by: argocd
+    spec:
+      containers:
+        - name: gluetun-ivpn
+          image: qmcgaw/gluetun:latest
+          env:
+            - name: VPN_SERVICE_PROVIDER
+              value: ivpn
+            - name: VPN_TYPE
+              value: wireguard
+            - name: WIREGUARD_PRIVATE_KEY
+              value: 
+            - name: WIREGUARD_ADDRESSES
+              value: 
+            - name: SERVER_COUNTRIES
+              value: switzerland
+            - name: SERVER_CITIES
+              value: zurich
+            - name: SERVER_HOSTNAMES
+              value: ch1.wg.ivpn.net
+            - name: VPN_ENDPOINT_PORT
+              value: "2049"
+            - name: FIREWALL_VPN_INPUT_PORTS
+              value: "45457"
+          securityContext:                          
+            privileged: true                        
+            capabilities:                           
+              add:                                  
+                - NET_ADMIN
+          ports:                                    
+            - containerPort: 8888                   
+            - containerPort: 8388                   
+            - containerPort: 8388                   
+              protocol: UDP                         
+            - containerPort: 8000      
+        - name: qbittorrent
+          image: lscr.io/linuxserver/qbittorrent:latest
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: "TZ"
+              value: "Europe/Paris"
+            - name: WEBUI_PORT
+              value: "8080"
+          ports:
+            - containerPort: 8080
+            - containerPort: 6881
+          resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+          volumeMounts:
+          - mountPath: /config
+            name: qbittorrent-config
+          - mountPath: /downloads
+            name: qbittorrent-downloads
+      volumes:
+      - persistentVolumeClaim:
+          claimName: qbittorrent-config
+        name: qbittorrent-config
+      - persistentVolumeClaim:
+          claimName: qbittorrent-downloads
+        name: qbittorrent-downloads

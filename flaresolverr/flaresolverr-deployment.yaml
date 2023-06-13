@@ -1,4 +1,3 @@
-# Password : flaresolver123*flaresolverr
 apiVersion: apps/v1
 kind: Deployment
 metadata:

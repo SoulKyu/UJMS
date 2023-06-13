@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: scaleway
+  labels:
+    app: qbittorrent
+  name: qbittorrent
+  namespace: qbittorrent
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: qbittorrent.local.soulkyu.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: qbittorrent
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+      - qbittorrent.local.soulkyu.net
+      secretName: qbittorrent.local.soulkyu.net-tls

@@ -1,4 +1,3 @@
-# Password : prowlarr123*prowlarr
 apiVersion: apps/v1
 kind: Deployment
 metadata:
