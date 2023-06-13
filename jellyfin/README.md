@@ -1,4 +1,5 @@
 # JELLYFIN
+"Jellyfin est un logiciel de serveur multimédia sous licence libre, conçu pour organiser, lire et partager des fichiers multimédias numériques sur des appareils en réseau. C'est un fork d'Emby créé au moment où ce dernier est passé sous une licence propriétaire, et un modèle économique par abonnement"
 
 Jellyfin est le serveur principale de notre stack, celle qui sera accessible par l'ensemble de nos utilisateurs.
 La configuration est assez simple, il suffit d'avoir accés au même répertoire de films et de series que vos autres applications.
