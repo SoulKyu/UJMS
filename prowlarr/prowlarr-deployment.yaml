@@ -1,0 +1,44 @@
+# Password : prowlarr123*prowlarr
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr
+  namespace: prowlarr
+spec:
+  selector:
+    matchLabels:
+      app: prowlarr
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+        deployed_by: argocd
+    spec:
+      containers:
+        - name: prowlarr
+          image: lscr.io/linuxserver/prowlarr:latest
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: "TZ"
+              value: "Europe/Paris"
+          ports:
+            - containerPort: 9696
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "150m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+          - mountPath: /config
+            name: prowlarr-config
+      volumes:
+      - persistentVolumeClaim:
+          claimName: prowlarr-config
+        name: prowlarr-config
